@@ -34,7 +34,7 @@ Before running the command, you should:
 
 ### Command ###
 
-Once ready, open your console and run:
+Once ready, get to the airport, open your console and run:
 ```
 ItemPoser.PoseItem <itemID>
 ```
