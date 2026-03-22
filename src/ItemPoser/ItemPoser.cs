@@ -16,8 +16,6 @@ using Zorro.Core.CLI;
 namespace ItemPoser;
 
 [BepInAutoPlugin]
-[BepInDependency("com.github.MiiMii1205.CanadianCuisine")]
-
 public partial class ItemPoser : BaseUnityPlugin
 {
     internal static ManualLogSource Log { get; private set; } = null!;
