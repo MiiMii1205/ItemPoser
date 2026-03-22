@@ -1,71 +1,104 @@
 # ItemPoser
 
-A tool for posing and taking screenshot of items in their UI icon pose
+A tool for posing items to screenshot clean GUI item icons using PEAK’s in-game rendering.
 
-## What does this do? ##
+## Overview ##
 
-This mod is a handy little tool to help modders generate UI icons using the in-game rendering pipeline.
+ItemPoser is designed for custom item developers who want consistent, high-quality GUI item icons without recreating the game’s
+rendering setup externally.
 
-To use this tool, you'll first need to get a text console (like [AdvancedConsole](https://thunderstore.io/c/peak/p/keklick1337/AdvancedConsole/) for example)
+## Requirements ##
 
-You'll also need to find the `Item ID` of the item you want to pose.
+To use ItemPoser, you will need:
 
-If you're using `PEAKLib Items` to manage your custom item, the lib will automatically provide a free and valid ID, so you'll need to inspect your item in-game (using [Unity Explorer](https://thunderstore.io/c/peak/p/PEAK_Modding/UnityExplorer/)) to get their ID.
+- A console (like [AdvancedConsole](https://thunderstore.io/c/peak/p/keklick1337/AdvancedConsole/) for example),
+- A way to get Item IDs
+- [Unity Explorer](https://thunderstore.io/c/peak/p/PEAK_Modding/UnityExplorer/)
+- [PeakCinema](https://thunderstore.io/c/peak/p/megalon2d/PeakCinema/) (optionnal, to hide the HUD more easily)
 
-Otherwise, every vanilla item should have static IDs. If you ever used an item spawner, the items are order based on their item ID. You can also just decide to check their vanila item IDs too.
+## Getting Items IDs ##
 
-## How do I pose an item ##
+Before posing an item, you must retrieve its Item ID.
 
-As said before, you'll need an OPENABLE and INTERACTIVE console. But before entering the command, it's wise to do a couple of things...
+You can do this by using [Unity Explorer](https://thunderstore.io/c/peak/p/PEAK_Modding/UnityExplorer/) to inspect your item's `ItemComponent`. 
 
-1. Inspect your item and copy/note down their `Item ID`.
-2. Using Unity Explorer, enable the freecam.
+Copy or note it down for later.
 
-As a side note, I also recommand using [PeakCinema](https://thunderstore.io/c/peak/p/megalon2d/PeakCinema/) for
-   getting rid of the GUI. (I'm sure there's possibly something that can be done in Unity Explorer to hide the UI in
-   freecam mode, but this is faster imo)
+## Posing an item ##
 
-You just need to enable the cinema camera BEFORE enableing the Freecam. This way, the GUI will stays hidden no mater what.
+Before running the command, you should:
 
-But once everyting is done, Open your console and type `ItemPoser.PoseItem <itemID>` (using the item id you just got) and
-press enter.
+1. Retrived the item's ID
+2. (Optional) Enable the cinema camera in [PeakCinema](https://thunderstore.io/c/peak/p/megalon2d/PeakCinema/)
+3. Enable the freecam in [Unity Explorer](https://thunderstore.io/c/peak/p/PEAK_Modding/UnityExplorer/)
 
-This should pose your item using its UI data and lock the freecam directly to it.
+### Command ###
 
-You can then take a screenshot and use that to your's heart content.
+Once ready, open your console and run:
+```
+ItemPoser.PoseItem <itemID>
+```
 
-## I'm a Mod Creator and my items don't pose correctly. What can I do? ##
+This will snap and pose the item using it's UI Data, and locks the freecam to it.
 
-For your item to pose nicely, you'll need to provide  `Icon Position Offset`, `Icon Rotation Offset` and
-`Icon Scale Offset` in their UI Data's.
+You can then easily take a screenshot and import it to your editor of choice.
 
-For quick results, you can copy the values off a vanila item with an Item Icon you like. It usualy give great looking icons, especially if your custom item has the same gurth that the item you're basing yourself on.
+## Making Your Items Pose Correctly ##
 
-But if you want someting a bit more unique, you can always pose your item in the Unity Editor by hands with the "2D view" enabled. 
+If your custom item does not pose well, you'll need to configure these UI Data fields in your custom item's prefab:
+- `Icon Position Offset` 
+- `Icon Rotation Offset` 
+- `Icon Scale Offset` 
 
-### Filling Out the UI Data In the Unity Editor ###
+These control how the item appears when rendered as an icon.
 
-First, Before posing your item, you'll need to create an empty parent game object that will hold your item while posing (right click on your item > `Create Empty Parent`, or `Ctrl+Shift+G` with your item selected);
+There are two methods for configuring icon offsets.
 
-Then, just rotate/scale/move your item around until you're satisfied (NOTE: DO NOT ROTATE THE NEWLY CREATED PARENT. MAKE SURE IT'S YOUR ORIGINAL ITEM (THE ONE WITH THE ITEM COMPONENT ATTACHED TO IT) THAT'S SELECTED IN YOUR HIERARCHY!)
+### The Easy way ###
 
-Also, because this mod doesn't use the EXACT same pipeline for generating Item icons, your main focus should be on finding a good icon angle instead of moving/scaling.  
+For quick results, you can copy the values of a vanilla item with an Item Icon you like.
 
-But after you found a satisfying pose, the next step is to:
-1. copy the `Position` (by right clicking on `Position`) of your item to the UI Data's `Icon Position Offset`
-1. copy the `Rotation` (by right clicking on `Rotation`, then `Copy Euler Angle`) of your item to the UI Data's `Icon Rotation Offset`
-1. copy the `Scale X` of your item to the UI Data's `Icon Scale Offset`
+It usually give great looking icons, especially if both items have the same girth.
 
-Then save the `Icon Position Offset`, `Icon Rotation Offset` and `Icon Scale Offset` to your prefab by right-clicking on "UI Data" and clicking on "Apply to Prefab"
+### The Custom Way ###
 
-You can then rebuild and replace your `.peakbundle` as usual and your item will be ready to pose.
+For better control, you can configure the offsets manually in the Unity Editor.
+
+#### Step 1: Prepare the hierarchy ####
+
+1. Drag'n'drop your custom item Prefab from the Project Window into your Scene View (doesn't matter which scene is loaded)
+2. Enter the "2D view" mode by clicking the "2D" icon in your scene view's toolbar
+3. Move your item so that it's fully visible
+1. Select your item
+1. Create an empty parent (<kbd>Ctrl+Shift+G</kbd>, or right-click it in the Hierarchy Window -> `Create Empty Parent`)
+
+<p>
+<mark>
+❌ <b>Important</b>: Do NOT change the parent object's transform. Only change the original item's transform (the game object holding the <code>ItemComponent</code>)
+</mark>
+</p>
+
+You can then hide/disable the player hand models and/or anything that's in the way.
+
+#### Step 2: Pose the item ####
+
+Adjust the position, rotation, and scale of your item visually and manually.
+
+Once you're satisfied, copy/paste the transform values into the item's UI Data:
+1. Copy the `Position` ( right-clicking `Position` -> `Copy`) to `Icon Position Offset`
+2. Copy the `Rotation` ( right-clicking `Rotation` -> `Copy Euler Angle`) to `Icon Rotation Offset`
+3. Copy the `Scale` of X to `Icon Scale Offset`
+
+Then finaly in the Inspector, right-click on `UI Data` and select `Apply to Prefab` to save the offset to your prefab.
+
+Rebuild your bundle and your item should now pose correctly.
 
 ## Configuration ##
 
 To help you get a good and easy to work with shot, the mod comes with a couple of configs options:
 
 - `Red Value`, `Green Value`, `Blue Value`: The RGB values of the item's backdrop (ranges from 0-255). Leave as default for a perfect green.
-- "Setup Rotation": The Y angle (yaw) of the whole pose setup. Usefull for tweaking the lighting.
+- `Setup Rotation`: The Y angle (yaw) of the whole pose setup. Use this to tweak the lighting.
 
 You can change these configs in the mod's config file.
 
